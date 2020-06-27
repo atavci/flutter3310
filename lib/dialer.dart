@@ -7,9 +7,9 @@ class Dialer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 500,
-      width: 400,
-      height: 300,
+      top: (MediaQuery.of(context).size.height / 1.55) ,
+      width: 250,
+      height: 200,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,

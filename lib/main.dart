@@ -36,17 +36,18 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
+      backgroundColor: Colors.white,
       body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           Positioned(
-            top: 100,
-            left: 50,
-            right: 50,
+            top: 140,
+            left: 100,
+            right: 100,
             child: Container(
-              height: MediaQuery.of(context).size.height / 4,
-              width: MediaQuery.of(context).size.width / 2,
+              height: MediaQuery.of(context).size.height / 3,
+              width: MediaQuery.of(context).size.width / 4,
+              padding: EdgeInsets.symmetric(horizontal:20.0,vertical: 30.0),
               color: AppColors.greenScreenColor,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -64,9 +65,10 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.only(top: 10.0),
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/images/nokiabig.png'),
+                    image: AssetImage('assets/images/nokiacutscreenv2.png'),
                     fit: BoxFit.contain)),
           ),
           Dialer(),
