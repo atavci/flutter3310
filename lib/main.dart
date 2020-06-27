@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nokiapro/styles/app_colors.dart';
+import 'package:nokiapro/styles/app_svg.dart';
 
 void main() {
   runApp(MyApp());
@@ -37,15 +38,39 @@ class _MyHomePageState extends State<MyHomePage> {
             right: 50,
             child: Container(
               height: MediaQuery.of(context).size.height / 3,
-              width: MediaQuery.of(context).size.width / 2,
+              width: MediaQuery.of(context).size.width / 3,
               color: AppColors.greenScreenColor,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
+                  Column(
+                    mainAxisAlignment:  MainAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height: 30,),
+                      Container(margin:const EdgeInsets.all(2.0),child: AppSVG.getSVG(AppSVG.barLargest,height:40),),
+                      Container(margin:const EdgeInsets.all(2.0),child: AppSVG.getSVG(AppSVG.barLarge,height:30),),
+                      Container(margin:const EdgeInsets.all(2.0),child: AppSVG.getSVG(AppSVG.barSmall),),
+                      Container(margin:const EdgeInsets.all(2.0),child: AppSVG.getSVG(AppSVG.barMedium),),
+                      Container(margin:const EdgeInsets.all(2.0),padding:const EdgeInsets.only(left: 5.0),child: AppSVG.getSVG(AppSVG.signal),),
+                    ],
+                  ),
+                  SizedBox(width: 50,),
                   Text(
                     'test',
                     style: TextStyle(color: Colors.black,fontSize: 25),
-                  )
+                  ),
+                  SizedBox(width: 50,),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height: 30,),
+                      Container(margin:const EdgeInsets.all(2.0),child: AppSVG.getSVG(AppSVG.barLargest,height:40),),
+                      Container(margin:const EdgeInsets.all(2.0),child: AppSVG.getSVG(AppSVG.barLarge,height:30),),
+                      Container(margin:const EdgeInsets.all(2.0),child: AppSVG.getSVG(AppSVG.barSmall),),
+                      Container(margin:const EdgeInsets.all(2.0),child: AppSVG.getSVG(AppSVG.barMedium),),
+                      Container(margin:const EdgeInsets.all(2.0),padding:const EdgeInsets.only(right: 5.0),child: AppSVG.getSVG(AppSVG.battery),),
+                    ],
+                  ),
                 ],
               ),
             ),
