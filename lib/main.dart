@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nokiapro/dialer.dart';
 import 'package:nokiapro/styles/app_colors.dart';
+import 'package:provider/provider.dart';
+
+import 'dialer_model.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,13 +13,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Nokia Pro',
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return ChangeNotifierProvider<DialerModel>(
+      create: (context) => DialerModel(),
+      child: MaterialApp(
+        title: 'Nokia Pro',
+        theme: ThemeData(
+          primarySwatch: Colors.grey,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: MyHomePage(),
       ),
-      home: MyHomePage(),
     );
   }
 }
@@ -29,22 +36,27 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
+      backgroundColor: Colors.white,
       body: Stack(
+        alignment: Alignment.center,
         children: <Widget>[
           Positioned(
-            left: 50,
-            right: 50,
+            top: 140,
+            left: 100,
+            right: 100,
             child: Container(
               height: MediaQuery.of(context).size.height / 3,
-              width: MediaQuery.of(context).size.width / 2,
+              width: MediaQuery.of(context).size.width / 4,
+              padding: EdgeInsets.symmetric(horizontal:20.0,vertical: 30.0),
               color: AppColors.greenScreenColor,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(
-                    'test',
-                    style: TextStyle(color: Colors.black,fontSize: 25),
+                  Consumer<DialerModel>(
+                    builder: (context, value, child) => Text(
+                      value.number,
+                      style: TextStyle(color: Colors.black, fontSize: 25),
+                    ),
                   )
                 ],
               ),
@@ -53,11 +65,13 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.only(top: 10.0),
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/images/nokiabig.png'),
+                    image: AssetImage('assets/images/nokiacutscreenv2.png'),
                     fit: BoxFit.contain)),
           ),
+          Dialer(),
         ],
       ),
     );
