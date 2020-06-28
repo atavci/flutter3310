@@ -115,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             height: 30,
                             child: FlatButton(
                               onPressed: () {},
-                              child: Text('Menu'),
+                              child: Text(   'Menu'),
                             ))
                       ],
                     ),
@@ -171,7 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: FlatButton(
               padding: EdgeInsets.only(left: 20, right: 20),
               child: Text(''),
-              onPressed: () {},
+              onPressed: () {print('ok');},
             ),
           ),
           Positioned(
