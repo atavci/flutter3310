@@ -162,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Dialer(),
           Positioned(
-            top: 410,
+            top: MediaQuery.of(context).size.height/1.9,
             left: 150,
             right: 150,
             child: FlatButton(
@@ -172,25 +172,25 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           Positioned(
-            top: 444,
-            left: 90,
-            right: 260,
+            top: MediaQuery.of(context).size.height/1.8,
+            left: 100,
+            right: 250,
             child: FlatButton(
               onPressed: () { },
               child: Text(""),
             ),
           ),
           Positioned(
-            top: 435,
-            left: 275,
-            right: 85,
+            top:  MediaQuery.of(context).size.height/1.8,
+            left: 270,
+            right: 80,
             child: FlatButton(
               onPressed: () {},
               child: Text(""),
             ),
           ),
           Positioned(
-            top: 460,
+            top:  MediaQuery.of(context).size.height/1.7,
             left: 230,
             right: 130,
             child: FlatButton(
