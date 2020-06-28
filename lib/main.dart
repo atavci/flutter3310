@@ -40,13 +40,16 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
         onPressed: () =>
-            Provider.of<DialerModel>(context, listen: false).clear(),child: Text('C',style: TextStyle(fontSize: 20),),
+            Provider.of<DialerModel>(context, listen: false).clear(),
+        child: Text(
+          'C',
+          style: TextStyle(fontSize: 20),
+        ),
       ),
       body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           Positioned(
-
             top: 140,
             left: 80,
             right: 80,
@@ -176,7 +179,10 @@ class _MyHomePageState extends State<MyHomePage> {
             left: 100,
             right: 250,
             child: FlatButton(
-              onPressed: () { },
+              onPressed: () =>
+                  Provider.of<DialerModel>(context, listen: false).delete(),
+              onLongPress: () =>
+                  Provider.of<DialerModel>(context, listen: false).clear(),
               child: Text(""),
             ),
           ),
@@ -194,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
             left: 230,
             right: 130,
             child: FlatButton(
-              onPressed: () { },
+              onPressed: () {},
               child: Text(""),
             ),
           ),
