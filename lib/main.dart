@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nokiapro/dialer.dart';
 import 'package:nokiapro/styles/app_colors.dart';
+import 'package:nokiapro/styles/button_design.dart';
 import 'package:provider/provider.dart';
 
 import 'dialer_model.dart';
@@ -41,13 +42,13 @@ class _MyHomePageState extends State<MyHomePage> {
         alignment: Alignment.center,
         children: <Widget>[
           Positioned(
-            top: 140,
+            top: 150,
             left: 100,
             right: 100,
             child: Container(
               height: MediaQuery.of(context).size.height / 3,
               width: MediaQuery.of(context).size.width / 4,
-              padding: EdgeInsets.symmetric(horizontal:20.0,vertical: 30.0),
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
               color: AppColors.greenScreenColor,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -72,6 +73,43 @@ class _MyHomePageState extends State<MyHomePage> {
                     fit: BoxFit.contain)),
           ),
           Dialer(),
+          Positioned(
+            top: 410,
+            left: 150,
+            right: 150,
+            child: FlatButton(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Text(''),
+              onPressed: () {},
+            ),
+          ),
+          Positioned(
+            top: 444,
+            left: 90,
+            right: 260,
+            child: FlatButton(
+              onPressed: () { },
+              child: Text(""),
+            ),
+          ),
+          Positioned(
+            top: 435,
+            left: 275,
+            right: 85,
+            child: FlatButton(
+              onPressed: () {},
+              child: Text(""),
+            ),
+          ),
+          Positioned(
+            top: 460,
+            left: 230,
+            right: 130,
+            child: FlatButton(
+              onPressed: () { },
+              child: Text(""),
+            ),
+          ),
         ],
       ),
     );

@@ -7,13 +7,14 @@ class Dialer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: (MediaQuery.of(context).size.height / 1.55) ,
+      top: (MediaQuery.of(context).size.height / 1.55),
       width: 250,
-      height: 200,
+      height: 220,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
+          columnSpace(),
           Expanded(
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -23,6 +24,7 @@ class Dialer extends StatelessWidget {
                   DialerButton('3'),
                 ]),
           ),
+          columnSpace(),
           Expanded(
             child: Row(children: <Widget>[
               DialerButton('4'),
@@ -30,6 +32,7 @@ class Dialer extends StatelessWidget {
               DialerButton('6'),
             ]),
           ),
+          columnSpace(),
           Expanded(
             child: Row(children: <Widget>[
               DialerButton('7'),
@@ -37,6 +40,7 @@ class Dialer extends StatelessWidget {
               DialerButton('9'),
             ]),
           ),
+          columnSpace(),
           Expanded(
             child: Row(children: <Widget>[
               DialerButton('*'),
@@ -48,6 +52,8 @@ class Dialer extends StatelessWidget {
       ),
     );
   }
+
+  Widget columnSpace() => SizedBox(height: 10);
 }
 
 class DialerButton extends StatelessWidget {
