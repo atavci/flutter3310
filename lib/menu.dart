@@ -15,26 +15,26 @@ class MenuItem {
       name: 'Messages',
       icon: (Icons.message),
     ),
-    MenuItem(
-      name: 'Chat',
-      icon: (Icons.chat),
-    ),
-    MenuItem(
-      name: 'Call register',
-      icon: (Icons.phone),
-    ),
-    MenuItem(
-      name: 'Tones',
-      icon: (Icons.phonelink_ring),
-    ),
-    MenuItem(
-      name: 'Settings',
-      icon: (Icons.settings),
-    ),
-    MenuItem(
-      name: 'Call divert',
-      icon: (Icons.dialer_sip),
-    ),
+//    MenuItem(
+//      name: 'Chat',
+//      icon: (Icons.chat),
+//    ),
+//    MenuItem(
+//      name: 'Call register',
+//      icon: (Icons.phone),
+//    ),
+//    MenuItem(
+//      name: 'Tones',
+//      icon: (Icons.phonelink_ring),
+//    ),
+//    MenuItem(
+//      name: 'Settings',
+//      icon: (Icons.settings),
+//    ),
+//    MenuItem(
+//      name: 'Call divert',
+//      icon: (Icons.dialer_sip),
+//    ),
     MenuItem(
       name: 'Games',
       icon: (Icons.games),
@@ -43,22 +43,22 @@ class MenuItem {
       name: 'Calculator',
       icon: (Icons.calendar_today),
     ),
-    MenuItem(
-      name: 'Reminders',
-      icon: (Icons.receipt),
-    ),
+//    MenuItem(
+//      name: 'Reminders',
+//      icon: (Icons.receipt),
+//    ),
     MenuItem(
       name: 'Clock',
       icon: (Icons.watch_later),
     ),
-    MenuItem(
-      name: 'Profiles',
-      icon: (Icons.person_outline),
-    ),
-    MenuItem(
-      name: 'SIM services',
-      icon: (Icons.sim_card),
-    ),
+//    MenuItem(
+//      name: 'Profiles',
+//      icon: (Icons.person_outline),
+//    ),
+//    MenuItem(
+//      name: 'SIM services',
+//      icon: (Icons.sim_card),
+//    ),
   ];
 }
 

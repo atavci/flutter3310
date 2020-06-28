@@ -43,14 +43,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            Provider.of<DialerModel>(context, listen: false).clear(),
-        child: Text(
-          'C',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
       body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
