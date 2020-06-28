@@ -46,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
         alignment: Alignment.center,
         children: <Widget>[
           Positioned(
+
             top: 140,
             left: 80,
             right: 80,
@@ -160,6 +161,43 @@ class _MyHomePageState extends State<MyHomePage> {
                     fit: BoxFit.contain)),
           ),
           Dialer(),
+          Positioned(
+            top: 410,
+            left: 150,
+            right: 150,
+            child: FlatButton(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Text(''),
+              onPressed: () {},
+            ),
+          ),
+          Positioned(
+            top: 444,
+            left: 90,
+            right: 260,
+            child: FlatButton(
+              onPressed: () { },
+              child: Text(""),
+            ),
+          ),
+          Positioned(
+            top: 435,
+            left: 275,
+            right: 85,
+            child: FlatButton(
+              onPressed: () {},
+              child: Text(""),
+            ),
+          ),
+          Positioned(
+            top: 460,
+            left: 230,
+            right: 130,
+            child: FlatButton(
+              onPressed: () { },
+              child: Text(""),
+            ),
+          ),
         ],
       ),
     );
