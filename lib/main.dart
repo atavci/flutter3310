@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nokiapro/dialer.dart';
+import 'package:nokiapro/snake/board.dart';
 import 'package:nokiapro/styles/app_colors.dart';
 import 'package:nokiapro/styles/app_svg.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +36,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+enum AppState { GAME, HOME, MENU }
+
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -43,6 +46,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int menuIdx = 0;
   bool menuTapped = false;
+  AppState appState = AppState.HOME;
+  Board _board = Board();
   String _time;
 
   @override
@@ -88,139 +93,9 @@ class _MyHomePageState extends State<MyHomePage> {
               width: MediaQuery.of(context).size.width / 4,
               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
               color: AppColors.greenScreenColor,
-              child: menuTapped
-                  ? menu()
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              child:
-                                  AppSVG.getSVG(AppSVG.barLargest, height: 24),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              child: AppSVG.getSVG(AppSVG.barLarge, height: 20),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              child: AppSVG.getSVG(AppSVG.barSmall, height: 16),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              child:
-                                  AppSVG.getSVG(AppSVG.barMedium, height: 16),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: AppSVG.getSVG(AppSVG.signal),
-                            ),
-                          ],
-                        ),
-//                  SizedBox(width: 50,),
-                        Container(
-                          height: 400,
-                          width: 150,
-                          child: Stack(
-                            alignment: Alignment.bottomCenter,
-                            children: <Widget>[
-                              Positioned(
-                                top: 40.0,
-                                right: 0.0,
-                                child: Text(_time),
-                              ),
-                              Positioned(
-                                top: 40,
-                                child: Container(
-                                  height: 110,
-                                  width: 150,
-                                  child: Consumer<DialerModel>(
-                                    builder: (context, value, child) =>
-                                        value.number.length > 0
-                                            ? Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 15.0),
-                                                child: Text(
-                                                  value.number,
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 25),
-                                                ),
-                                              )
-                                            : Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Container(
-                                                    height: 70,
-                                                    width: 50,
-                                                    decoration: BoxDecoration(
-                                                        image: DecorationImage(
-                                                            image: AssetImage(
-                                                                'assets/images/flutter logo.png'))),
-                                                  ),
-                                                  Text('Flutter #Hack20')
-                                                ],
-                                              ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                  height: 30,
-                                  child: FlatButton(
-                                    onPressed: () {},
-                                    child: Text(
-                                        Provider.of<DialerModel>(context)
-                                                    .number
-                                                    .length >
-                                                0
-                                            ? 'Call'
-                                            : 'Menu'),
-                                  ))
-                            ],
-                          ),
-                        ),
-//                  SizedBox(width: 50,),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              child:
-                                  AppSVG.getSVG(AppSVG.barLargest, height: 24),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              child: AppSVG.getSVG(AppSVG.barLarge, height: 20),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              child: AppSVG.getSVG(AppSVG.barSmall, height: 16),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              child:
-                                  AppSVG.getSVG(AppSVG.barMedium, height: 16),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              padding: const EdgeInsets.only(right: 5.0),
-                              child: AppSVG.getSVG(AppSVG.battery),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+              child: (appState == AppState.HOME)
+                  ? buildHome()
+                  : ((appState == AppState.MENU) ? menu() : Board()),
             ),
           ),
           Container(
@@ -243,19 +118,15 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text(''),
               onPressed: () {
                 setState(() {
-                  if (menuTapped) {
-                  } else {
-                    if (Provider.of<DialerModel>(context, listen: false)
-                            .number
-                            .length >
-                        0) {
-                      _makePhoneCall(
-                          Provider.of<DialerModel>(context, listen: false)
-                              .number);
+                  if (appState == AppState.HOME) {
+                    if (Provider.of<DialerModel>(context, listen: false).number.length > 0) {
+                      _makePhoneCall(Provider.of<DialerModel>(context, listen: false).number);
                     } else {
-                      menuTapped = !menuTapped;
+                      appState = AppState.MENU;
+                      menuTapped = true;
                     }
-                  }
+                  } else if (appState == AppState.MENU)
+                    appState = AppState.GAME;
                 });
               },
             ),
@@ -267,9 +138,14 @@ class _MyHomePageState extends State<MyHomePage> {
             right: 250,
             child: FlatButton(
               onPressed: () {
-                if (menuTapped) {
+                if (appState == AppState.MENU) {
                   setState(() {
-                    menuTapped = !menuTapped;
+                    menuTapped = false;
+                    appState = AppState.HOME;
+                  });
+                } else if (appState == AppState.GAME) {
+                  setState(() {
+                    appState = AppState.MENU;
                   });
                 } else {
                   Provider.of<DialerModel>(context, listen: false).delete();
@@ -330,6 +206,127 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Row buildHome() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              height: 40,
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              child: AppSVG.getSVG(AppSVG.barLargest, height: 24),
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              child: AppSVG.getSVG(AppSVG.barLarge, height: 20),
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              child: AppSVG.getSVG(AppSVG.barSmall, height: 16),
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              child: AppSVG.getSVG(AppSVG.barMedium, height: 16),
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              padding: const EdgeInsets.only(left: 5.0),
+              child: AppSVG.getSVG(AppSVG.signal),
+            ),
+          ],
+        ),
+        Container(
+          height: 400,
+          width: 150,
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: <Widget>[
+              Positioned(
+                top: 40.0,
+                right: 0.0,
+                child: Text(_time),
+              ),
+              Positioned(
+                top: 40,
+                child: Container(
+                  height: 110,
+                  width: 150,
+                  child: Consumer<DialerModel>(
+                    builder: (context, value, child) => value.number.length > 0
+                        ? Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(
+                              value.number,
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 20),
+                            ),
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 70,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/flutter logo.png'))),
+                              ),
+                              Text('Flutter #Hack20')
+                            ],
+                          ),
+                  ),
+                ),
+              ),
+              Container(
+                  height: 30,
+                  child: FlatButton(
+                    onPressed: () {},
+                    child: Text(
+                        Provider.of<DialerModel>(context).number.length > 0
+                            ? 'Call'
+                            : 'Menu'),
+                  ))
+            ],
+          ),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              height: 40,
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              child: AppSVG.getSVG(AppSVG.barLargest, height: 24),
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              child: AppSVG.getSVG(AppSVG.barLarge, height: 20),
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              child: AppSVG.getSVG(AppSVG.barSmall, height: 16),
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              child: AppSVG.getSVG(AppSVG.barMedium, height: 16),
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              padding: const EdgeInsets.only(right: 5.0),
+              child: AppSVG.getSVG(AppSVG.battery),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   Widget menu() {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -385,35 +382,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-//        Row(
-//          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//          children: <Widget>[
-//            IconButton(
-//                icon: Icon(Icons.arrow_back_ios),
-//                onPressed: () {
-//                  if (menuIdx == 0) {
-//                    setState(() {
-//                      menuIdx = MenuItem.menuItems.length - 1;
-//                    });
-//                  } else
-//                    setState(() {
-//                      menuIdx--;
-//                    });
-//                }),
-//            IconButton(
-//                icon: Icon(Icons.arrow_forward_ios),
-//                onPressed: () {
-//                  if (menuIdx == MenuItem.menuItems.length - 1) {
-//                    setState(() {
-//                      menuIdx = 0;
-//                    });
-//                  } else
-//                    setState(() {
-//                      menuIdx++;
-//                    });
-//                })
-//          ],
-//        )
       ],
     );
   }
