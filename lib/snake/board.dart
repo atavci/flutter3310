@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:nokiapro/styles/app_colors.dart';
 import './apple.dart';
@@ -25,6 +26,12 @@ class _BoardState extends State<Board> {
   Timer _timer;
   Direction _direction = Direction.UP;
   var _gameState = GameState.SPLASH;
+
+  @override
+  void initState() {
+    _moveFromSplashToRunningState();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

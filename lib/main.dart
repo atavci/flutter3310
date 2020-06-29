@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nokiapro/dialer.dart';
+import 'package:nokiapro/snake/board.dart';
 import 'package:nokiapro/styles/app_colors.dart';
 import 'package:nokiapro/styles/app_svg.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'dialer_model.dart';
 
 import './menu.dart';
-import 'snake/game.dart';
 
 void main() {
   runApp(MyApp());
@@ -42,6 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int menuIdx = 0;
   bool menuTapped = false;
   AppState appState = AppState.HOME;
+  Board _board = Board();
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
               color: AppColors.greenScreenColor,
               child: (appState == AppState.HOME)
                   ? buildHome()
-                  : ((appState == AppState.MENU) ? menu() : Game()),
+                  : ((appState == AppState.MENU) ? menu() : Board()),
             ),
           ),
           Container(
