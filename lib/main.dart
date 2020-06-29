@@ -7,7 +7,8 @@ import 'package:provider/provider.dart';
 import 'dialer_model.dart';
 
 import './menu.dart';
-import 'snake/game.dart';
+import 'game_model.dart';
+import 'snake/board.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,8 +17,11 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<DialerModel>(
-      create: (context) => DialerModel(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<DialerModel>(create: (context) => DialerModel()),
+        ChangeNotifierProvider<GameModel>(create: (context) => GameModel()),
+      ],
       child: MaterialApp(
         title: 'Nokia Pro',
         theme: ThemeData(
@@ -61,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
               color: AppColors.greenScreenColor,
               child: (appState == AppState.HOME)
                   ? buildHome()
-                  : ((appState == AppState.MENU) ? menu() : Game()),
+                  : ((appState == AppState.MENU) ? menu() : Board()),
             ),
           ),
           Container(
@@ -89,6 +93,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     menuTapped = true;
                   } else if (appState == AppState.MENU)
                     appState = AppState.GAME;
+                  else if (appState == AppState.GAME) {
+                    Provider.of<GameModel>(context, listen: false)
+                        .moveFromSplashToRunningState();
+                  }
                 });
               },
             ),
@@ -132,14 +140,19 @@ class _MyHomePageState extends State<MyHomePage> {
             right: 80,
             child: FlatButton(
               onPressed: () {
-                if (menuIdx == MenuItem.menuItems.length - 1) {
-                  setState(() {
-                    menuIdx = 0;
-                  });
-                } else
-                  setState(() {
-                    menuIdx++;
-                  });
+                if (appState == AppState.GAME) {
+                  Provider.of<GameModel>(context, listen: false)
+                      .changeDirection(Direction.UP);
+                } else {
+                  if (menuIdx == MenuItem.menuItems.length - 1) {
+                    setState(() {
+                      menuIdx = 0;
+                    });
+                  } else
+                    setState(() {
+                      menuIdx++;
+                    });
+                }
               },
               child: Text(""),
             ),
@@ -151,14 +164,19 @@ class _MyHomePageState extends State<MyHomePage> {
             right: 130,
             child: FlatButton(
               onPressed: () {
-                if (menuIdx == 0) {
-                  setState(() {
-                    menuIdx = MenuItem.menuItems.length - 1;
-                  });
-                } else
-                  setState(() {
-                    menuIdx--;
-                  });
+                if (appState == AppState.GAME) {
+                  Provider.of<GameModel>(context, listen: false)
+                      .changeDirection(Direction.DOWN);
+                } else {
+                  if (menuIdx == 0) {
+                    setState(() {
+                      menuIdx = MenuItem.menuItems.length - 1;
+                    });
+                  } else
+                    setState(() {
+                      menuIdx--;
+                    });
+                }
               },
               child: Text(""),
             ),
