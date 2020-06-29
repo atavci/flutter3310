@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nokiapro/dialer.dart';
 import 'package:nokiapro/styles/app_colors.dart';
 import 'package:nokiapro/styles/app_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'dialer_model.dart';
 
@@ -19,6 +23,7 @@ class MyApp extends StatelessWidget {
       create: (context) => DialerModel(),
       child: MaterialApp(
         title: 'Nokia Pro',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'nokiaFonts',
           primarySwatch: Colors.grey,
@@ -38,6 +43,34 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int menuIdx = 0;
   bool menuTapped = false;
+  String _time;
+
+  @override
+  void initState() {
+    _time = _formatDateTime(DateTime.now());
+    Timer.periodic(Duration(seconds: 5), (Timer t) => _getTime());
+    super.initState();
+  }
+
+  void _getTime() {
+    final DateTime now = DateTime.now();
+    final String formattedDateTime = _formatDateTime(now);
+    setState(() {
+      _time = formattedDateTime;
+    });
+  }
+
+  String _formatDateTime(DateTime dateTime) {
+    return DateFormat("HH:mm").format(dateTime);
+  }
+
+  Future<void> _makePhoneCall(String url) async {
+    if (await canLaunch('tel:' + url)) {
+      await launch('tel:' + url);
+    } else {
+      print('Could not launch $url');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +132,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             alignment: Alignment.bottomCenter,
                             children: <Widget>[
                               Positioned(
+                                top: 40.0,
+                                right: 0.0,
+                                child: Text(_time),
+                              ),
+                              Positioned(
                                 top: 40,
                                 child: Container(
                                   height: 110,
@@ -106,16 +144,21 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: Consumer<DialerModel>(
                                     builder: (context, value, child) =>
                                         value.number.length > 0
-                                            ? Text(
-                                                value.number,
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 25),
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 15.0),
+                                                child: Text(
+                                                  value.number,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 25),
+                                                ),
                                               )
                                             : Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                Container(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Container(
                                                     height: 70,
                                                     width: 50,
                                                     decoration: BoxDecoration(
@@ -123,9 +166,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                                             image: AssetImage(
                                                                 'assets/images/flutter logo.png'))),
                                                   ),
-                                                Text('Flutter #Hack20')
-                                              ],
-                                            ),
+                                                  Text('Flutter #Hack20')
+                                                ],
+                                              ),
                                   ),
                                 ),
                               ),
@@ -133,7 +176,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                   height: 30,
                                   child: FlatButton(
                                     onPressed: () {},
-                                    child: Text('Menu'),
+                                    child: Text(
+                                        Provider.of<DialerModel>(context)
+                                                    .number
+                                                    .length >
+                                                0
+                                            ? 'Call'
+                                            : 'Menu'),
                                   ))
                             ],
                           ),
@@ -194,7 +243,19 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text(''),
               onPressed: () {
                 setState(() {
-                  menuTapped = !menuTapped;
+                  if (menuTapped) {
+                  } else {
+                    if (Provider.of<DialerModel>(context, listen: false)
+                            .number
+                            .length >
+                        0) {
+                      _makePhoneCall(
+                          Provider.of<DialerModel>(context, listen: false)
+                              .number);
+                    } else {
+                      menuTapped = !menuTapped;
+                    }
+                  }
                 });
               },
             ),
