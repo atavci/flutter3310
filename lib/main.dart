@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Nokia Pro',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'nokiaFonts',
           primarySwatch: Colors.grey,
