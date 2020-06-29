@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'dialer_model.dart';
 
 import './menu.dart';
+import 'snake/game.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,6 +31,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+enum AppState { GAME, HOME, MENU }
+
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -38,6 +41,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int menuIdx = 0;
   bool menuTapped = false;
+  AppState appState = AppState.HOME;
 
   @override
   Widget build(BuildContext context) {
@@ -55,123 +59,9 @@ class _MyHomePageState extends State<MyHomePage> {
               width: MediaQuery.of(context).size.width / 4,
               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
               color: AppColors.greenScreenColor,
-              child: menuTapped
-                  ? menu()
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              child:
-                                  AppSVG.getSVG(AppSVG.barLargest, height: 24),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              child: AppSVG.getSVG(AppSVG.barLarge, height: 20),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              child: AppSVG.getSVG(AppSVG.barSmall, height: 16),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              child:
-                                  AppSVG.getSVG(AppSVG.barMedium, height: 16),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: AppSVG.getSVG(AppSVG.signal),
-                            ),
-                          ],
-                        ),
-//                  SizedBox(width: 50,),
-                        Container(
-                          height: 400,
-                          width: 150,
-                          child: Stack(
-                            alignment: Alignment.bottomCenter,
-                            children: <Widget>[
-                              Positioned(
-                                top: 40,
-                                child: Container(
-                                  height: 110,
-                                  width: 150,
-                                  child: Consumer<DialerModel>(
-                                    builder: (context, value, child) =>
-                                        value.number.length > 0
-                                            ? Text(
-                                                value.number,
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 25),
-                                              )
-                                            : Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                Container(
-                                                    height: 70,
-                                                    width: 50,
-                                                    decoration: BoxDecoration(
-                                                        image: DecorationImage(
-                                                            image: AssetImage(
-                                                                'assets/images/flutter logo.png'))),
-                                                  ),
-                                                Text('Flutter #Hack20')
-                                              ],
-                                            ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                  height: 30,
-                                  child: FlatButton(
-                                    onPressed: () {},
-                                    child: Text('Menu'),
-                                  ))
-                            ],
-                          ),
-                        ),
-//                  SizedBox(width: 50,),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              child:
-                                  AppSVG.getSVG(AppSVG.barLargest, height: 24),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              child: AppSVG.getSVG(AppSVG.barLarge, height: 20),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              child: AppSVG.getSVG(AppSVG.barSmall, height: 16),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              child:
-                                  AppSVG.getSVG(AppSVG.barMedium, height: 16),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(2.0),
-                              padding: const EdgeInsets.only(right: 5.0),
-                              child: AppSVG.getSVG(AppSVG.battery),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+              child: (appState == AppState.HOME)
+                  ? buildHome()
+                  : ((appState == AppState.MENU) ? menu() : Game()),
             ),
           ),
           Container(
@@ -194,7 +84,11 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text(''),
               onPressed: () {
                 setState(() {
-                  menuTapped = !menuTapped;
+                  if (appState == AppState.HOME) {
+                    appState = AppState.MENU;
+                    menuTapped = true;
+                  } else if (appState == AppState.MENU)
+                    appState = AppState.GAME;
                 });
               },
             ),
@@ -206,9 +100,14 @@ class _MyHomePageState extends State<MyHomePage> {
             right: 250,
             child: FlatButton(
               onPressed: () {
-                if (menuTapped) {
+                if (appState == AppState.MENU) {
                   setState(() {
-                    menuTapped = !menuTapped;
+                    menuTapped = false;
+                    appState = AppState.HOME;
+                  });
+                } else if (appState == AppState.GAME) {
+                  setState(() {
+                    appState = AppState.MENU;
                   });
                 } else {
                   Provider.of<DialerModel>(context, listen: false).delete();
@@ -266,6 +165,117 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
+    );
+  }
+
+  Row buildHome() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              height: 40,
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              child: AppSVG.getSVG(AppSVG.barLargest, height: 24),
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              child: AppSVG.getSVG(AppSVG.barLarge, height: 20),
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              child: AppSVG.getSVG(AppSVG.barSmall, height: 16),
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              child: AppSVG.getSVG(AppSVG.barMedium, height: 16),
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              padding: const EdgeInsets.only(left: 5.0),
+              child: AppSVG.getSVG(AppSVG.signal),
+            ),
+          ],
+        ),
+//                  SizedBox(width: 50,),
+        Container(
+          height: 400,
+          width: 150,
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: <Widget>[
+              Positioned(
+                top: 40,
+                child: Container(
+                  height: 110,
+                  width: 150,
+                  child: Consumer<DialerModel>(
+                    builder: (context, value, child) => value.number.length > 0
+                        ? Text(
+                            value.number,
+                            style: TextStyle(color: Colors.black, fontSize: 25),
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 70,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/flutter logo.png'))),
+                              ),
+                              Text('Flutter #Hack20')
+                            ],
+                          ),
+                  ),
+                ),
+              ),
+              Container(
+                  height: 30,
+                  child: FlatButton(
+                    onPressed: () {},
+                    child: Text('Menu'),
+                  ))
+            ],
+          ),
+        ),
+//                  SizedBox(width: 50,),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              height: 40,
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              child: AppSVG.getSVG(AppSVG.barLargest, height: 24),
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              child: AppSVG.getSVG(AppSVG.barLarge, height: 20),
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              child: AppSVG.getSVG(AppSVG.barSmall, height: 16),
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              child: AppSVG.getSVG(AppSVG.barMedium, height: 16),
+            ),
+            Container(
+              margin: const EdgeInsets.all(2.0),
+              padding: const EdgeInsets.only(right: 5.0),
+              child: AppSVG.getSVG(AppSVG.battery),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
